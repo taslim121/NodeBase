@@ -65,7 +65,7 @@ export const RegisterForm = () =>{
                     router.push("/");
                 },
                 onError: (ctx) =>{
-                    toast.error(ctx.error.message || "Something went wrong");       
+                    toast.error(ctx.error.message || "Something went wrong");
             }
             }
         )
@@ -93,6 +93,12 @@ export const RegisterForm = () =>{
                                         className={cn("w-full")}
                                         type="button"
                                         >
+                                            <Image
+                                                src="/github.svg"
+                                                alt="Github"
+                                                width={20}
+                                                height={20}
+                                                />
                                             Continue With Github
                                         </Button>
 
@@ -102,6 +108,12 @@ export const RegisterForm = () =>{
                                         className={cn("w-full")}
                                         type="button"
                                         >
+                                          <Image
+                                                src="/google.svg"
+                                                alt="Google"
+                                                width={20}
+                                                height={20}
+                                                />
                                             Continue With Google
                                         </Button>
                                     </div>

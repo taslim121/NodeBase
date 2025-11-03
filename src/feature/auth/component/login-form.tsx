@@ -84,7 +84,12 @@ export const LoginForm = () =>{
                                         disabled={isPending} 
                                         className={cn("w-full")}
                                         type="button"
-                                        >
+                                        >   <Image
+                                            src="/github.svg"
+                                            alt="Github"
+                                            width={20}
+                                            height={20}
+                                        />
                                             Continue With Github
                                         </Button>
 
@@ -94,6 +99,12 @@ export const LoginForm = () =>{
                                         className={cn("w-full")}
                                         type="button"
                                         >
+                                            <Image
+                                            src="/google.svg"
+                                            alt="Google"
+                                            width={20}
+                                            height={20}
+                                        />
                                             Continue With Google
                                         </Button>
                                     </div>
