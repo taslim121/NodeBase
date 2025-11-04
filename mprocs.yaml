@@ -1,0 +1,16 @@
+procs:
+  inngest:
+    cmd: ["npm", "run", "inngest:dev"]
+
+  next:
+    cmd: ["npm", "run", "dev"]
+# procs:
+#   inngest:
+#     # On Windows, executing the "npm" shim directly can cause
+#     # "%1 is not a valid Win32 application (os error 193)" because
+#     # the shim is not an executable. Use cmd /c to run npm, or
+#     # use npm.cmd. Using cmd /c works cross-shell.
+#     cmd: ["cmd", "/c", "npm", "run", "inngest:dev"]
+
+#   next:
+#     cmd: ["cmd", "/c", "npm", "run", "dev"]
