@@ -19,18 +19,28 @@ export const execute = inngest.createFunction(
       {
         model: googleAI("gemini-2.0-flash"),
         system : "You are a helpful assistant that helps people find information.",
-        prompt:"What is Semantic Layer Powered File Sytem in Short 50 words?"
+        prompt:"What is Semantic Layer Powered File Sytem in Short 50 words?",
+        experimental_telemetry: {
+          isEnabled: true,
+          recordInputs: true,
+          recordOutputs: true,
+        },
       }
 
     );
-
+    /*
     const { steps:openaiSteps } = await step.ai.wrap(
       "openai-genrate-text",
       generateText,
       {
         model: openAI("gpt-3.5-turbo"),
         system : "You are a helpful assistant that helps people find information.",
-        prompt:"What is Semantic Layer Powered File Sytem in Short 50 words?"
+        prompt:"What is Semantic Layer Powered File Sytem in Short 50 words?",
+        experimental_telemetry: {
+          isEnabled: true,
+          recordInputs: true,
+          recordOutputs: true,
+        },
       }
 
     );
@@ -41,11 +51,20 @@ export const execute = inngest.createFunction(
       {
         model: anthropicAI("claude-3-haiku-20240307"),
         system : "You are a helpful assistant that helps people find information.",
-        prompt:"What is Semantic Layer Powered File Sytem in Short 50 words?"
+        prompt:"What is Semantic Layer Powered File Sytem in Short 50 words?",
+        experimental_telemetry: {
+          isEnabled: true,
+          recordInputs: true,
+          recordOutputs: true,
+        },
       }
 
     );
+    */
 
-    return {geminiSteps,openaiSteps,anthropicSteps};
+    return {geminiSteps
+      //,openaiSteps,
+      //anthropicSteps
+    };
   },
 );
