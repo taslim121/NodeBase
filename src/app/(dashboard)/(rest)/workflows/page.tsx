@@ -1,4 +1,4 @@
-import { WorkflowsContainer, WorkflowsList } from "@/feature/workflows/components/workflows";
+import { WorkflowsContainer, WorkflowsError, WorkflowsList, WorkflowsLoading } from "@/feature/workflows/components/workflows";
 import { prefetchWorkflows } from "@/feature/workflows/server/prefetch";
 import { requireAuth } from "@/lib/auth-utils";
 import { HydrateClient } from "@/trpc/server";
@@ -20,8 +20,8 @@ prefetchWorkflows(params);
   return (
     <WorkflowsContainer>
       <HydrateClient>
-        <ErrorBoundary fallback={<div>Something went wrong.</div>}>
-          <Suspense fallback={<div>Loading workflows...</div>}>
+        <ErrorBoundary fallback={<WorkflowsError/>}>
+          <Suspense fallback={<WorkflowsLoading/>}>
             <WorkflowsList />
           </Suspense>
         </ErrorBoundary>
