@@ -19,6 +19,7 @@ import {
 
 import { ErrorView, LoadingView } from "@/components/entity-components";
 import { useSuspenseWorkflow } from "@/feature/workflows/hooks/use-workflows";
+import { useTheme } from "next-themes";
 
 import "@xyflow/react/dist/style.css";
 import { nodeComponents } from "@/config/node-components";
@@ -34,7 +35,7 @@ export const EditorError = () => {
 
 export const Editor = ({ workflowId }: { workflowId: string }) => {
   const { data: workflow } = useSuspenseWorkflow(workflowId);
-
+  const { theme } = useTheme();
   const [nodes, setNodes] = useState<Node[]>(workflow.nodes);
   const [edges, setEdges] = useState<Edge[]>(workflow.edges);
 
@@ -53,6 +54,7 @@ export const Editor = ({ workflowId }: { workflowId: string }) => {
       setEdges((edgesSnapshot) => addEdge(params, edgesSnapshot)),
     []
   );
+
   return (
     <div className="size-full">
       <ReactFlow
@@ -61,6 +63,7 @@ export const Editor = ({ workflowId }: { workflowId: string }) => {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        colorMode={theme as "light" | "dark" | "system"}
         nodeTypes={nodeComponents}
         fitView
         proOptions={{
