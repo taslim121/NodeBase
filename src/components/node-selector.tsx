@@ -15,8 +15,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
-import { on } from "node:events";
-import { set } from "zod";
 
 export type NodeTypeOption = {
   type: NodeType;

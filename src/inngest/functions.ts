@@ -1,70 +1,50 @@
-import prisma from "@/lib/db";
+
+import { NonRetriableError } from "inngest";
 import { inngest } from "./client";
-import {createGoogleGenerativeAI} from "@ai-sdk/google";
-import {createOpenAI} from "@ai-sdk/openai";
-import {createAnthropic} from "@ai-sdk/anthropic";
-import {generateText} from "ai";
+import prisma from "@/lib/db";
+import { topolocicalSort } from "./utils";
+import { NodeType } from "@/generated/prisma/enums";
+import { getExecutor } from "@/feature/executions/lib/executor-registry";
 
-const googleAI = createGoogleGenerativeAI();
-const openAI = createOpenAI();
-const anthropicAI = createAnthropic();
 
-export const execute = inngest.createFunction(
-  { id: "execute-ai" },
-  { event: "execute/ai" },
+export const executeWorkflow = inngest.createFunction(
+  { id: "execute-workflow" },
+  { event: "workflows/execute.workflow" },
   async ({ event, step }) => {
-    const { steps:geminiSteps } = await step.ai.wrap(
-      "gemini-genrate-text",
-      generateText,
-      {
-        model: googleAI("gemini-2.0-flash"),
-        system : "You are a helpful assistant that helps people find information.",
-        prompt:"What is Semantic Layer Powered File Sytem in Short 50 words?",
-        experimental_telemetry: {
-          isEnabled: true,
-          recordInputs: true,
-          recordOutputs: true,
-        },
-      }
 
-    );
-    /*
-    const { steps:openaiSteps } = await step.ai.wrap(
-      "openai-genrate-text",
-      generateText,
-      {
-        model: openAI("gpt-3.5-turbo"),
-        system : "You are a helpful assistant that helps people find information.",
-        prompt:"What is Semantic Layer Powered File Sytem in Short 50 words?",
-        experimental_telemetry: {
-          isEnabled: true,
-          recordInputs: true,
-          recordOutputs: true,
-        },
-      }
+    const workflowId = event.data.workflowId;
 
-    );
+    if (!workflowId) {
+      throw new NonRetriableError("No workflow ID provided");
+    }
 
-    const { steps:anthropicSteps } = await step.ai.wrap(
-      "anthropic-genrate-text",
-      generateText,
-      {
-        model: anthropicAI("claude-3-haiku-20240307"),
-        system : "You are a helpful assistant that helps people find information.",
-        prompt:"What is Semantic Layer Powered File Sytem in Short 50 words?",
-        experimental_telemetry: {
-          isEnabled: true,
-          recordInputs: true,
-          recordOutputs: true,
-        },
-      }
+    const sortedNodes = await step.run("Prepare-workflow", async () => {
+      const workflow = await prisma.workflow.findUniqueOrThrow({
+        where: { id: workflowId },
+        include: { nodes: true, connections: true },
+      });
 
-    );
-    */
+      return topolocicalSort(workflow.nodes, workflow.connections);
+    });
 
-    return {geminiSteps
-      //,openaiSteps,
-      //anthropicSteps
+    //Initilaize the context with any initial data from the trigger node
+    let context = event.data.initialData || {};
+
+    //Execute Each Node
+    for (const node of sortedNodes) {
+      const executor = getExecutor(node.type as NodeType);
+      context = await executor({
+        data: node.data as Record<string, unknown>,
+        nodeId: node.id,
+        context,
+        step,
+      });
+    }
+
+    return {
+      workflowId,
+      result: context,
+
     };
   },
 );
