@@ -4,7 +4,20 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   devIndicators: false,
-  serverExternalPackages: ['require-in-the-middle'],
+  serverExternalPackages: ['@sentry/node'],
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // Exclude Node.js built-in modules from client bundle
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        'async_hooks': false,
+        'fs': false,
+        'path': false,
+        'crypto': false,
+      };
+    }
+    return config;
+  },
   async redirects() {
     return [
       {
