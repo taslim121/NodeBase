@@ -2,6 +2,7 @@ import Handlebars from "handlebars";
 import type { NodeExecutor } from "@/feature/executions/types";
 import { NonRetriableError } from "inngest";
 import ky, { Options as KyOptions } from "ky";
+import { httpRequestChannel } from "@/inngest/channels/http-request";
 
 Handlebars.registerHelper("json", (context) =>
     new Handlebars.SafeString(JSON.stringify(context, null, 2)));
@@ -18,57 +19,94 @@ export const httpRequestExecutor: NodeExecutor<HttprequestData> = async ({
     nodeId,
     context,
     step,
+    publish,
 }) => {
-    //TODO: PUblish "loading" state for manual trigger node
+    await publish(
+        httpRequestChannel().status({
+            nodeId,
+            status: "loading",
+        })
+    )
 
     if (!data.endpoint) {
-        //TODO: Publish error state for node
+        await publish(
+            httpRequestChannel().status({
+                nodeId,
+                status: "error",
+            })
+        )
         throw new NonRetriableError("HTTP Request node: No endpoint configured.");
     }
     if (!data.variableName) {
+        await publish(
+            httpRequestChannel().status({
+                nodeId,
+                status: "error",
+            })
+        )
         throw new NonRetriableError("HTTP Request node: No variable name configured.");
     }
     if (!data.method) {
+        await publish(
+            httpRequestChannel().status({
+                nodeId,
+                status: "error",
+            })
+        )
         throw new NonRetriableError("HTTP Request node: No HTTP method configured.");
     }
+    try {
+        const result = await step.run("http-request", async () => {
+            const endpoint = Handlebars.compile(data.endpoint)(context);
+            console.log("HTTP Request to:", endpoint);
+            const method = data.method;
+            const options: KyOptions = { method };
 
-    const result = await step.run("http-request", async () => {
-        const endpoint = Handlebars.compile(data.endpoint)(context);
-        console.log("HTTP Request to:", endpoint);
-        const method = data.method;
-        const options: KyOptions = { method };
+            if (["POST", "PUT", "PATCH"].includes(method)) {
+                const resolved = Handlebars.compile(data.body || "{}")(context);
+                console.log("HTTP Request body:", resolved);
+                JSON.parse(resolved);
+                options.body = resolved;
+                options.headers = {
+                    "Content-Type": "application/json",
+                };
+            }
 
-        if (["POST", "PUT", "PATCH"].includes(method)) {
-            const resolved = Handlebars.compile(data.body || "{}")(context);
-            console.log("HTTP Request body:", resolved);
-            JSON.parse(resolved);
-            options.body = resolved;
-            options.headers = {
-                "Content-Type": "application/json",
+            const response = await ky(endpoint, options);
+            const contentType = response.headers.get("content-type");
+            const responseData = contentType?.includes("application/json")
+                ? await response.json()
+                : await response.text();
+
+            const responsePayload = {
+                httpResponse: {
+                    status: response.status,
+                    statusText: response.statusText,
+                    data: responseData,
+                },
             };
-        }
 
-        const response = await ky(endpoint, options);
-        const contentType = response.headers.get("content-type");
-        const responseData = contentType?.includes("application/json")
-            ? await response.json()
-            : await response.text();
+            return {
+                ...context,
+                [data.variableName]: responsePayload
+            };
+        });
 
-        const responsePayload = {
-            httpResponse: {
-                status: response.status,
-                statusText: response.statusText,
-                data: responseData,
-            },
-        };
+        await publish(
+            httpRequestChannel().status({
+                nodeId,
+                status: "success",
+            })
+        )
 
-        return {
-            ...context,
-            [data.variableName]: responsePayload
-        };
-    });
-
-    //TODO: Publish "completed" state for manual trigger node
-
-    return result;
+        return result;
+    } catch (error) {
+        await publish(
+            httpRequestChannel().status({
+                nodeId,
+                status: "error",
+            }),
+        );
+        throw error;
+    }
 }   
