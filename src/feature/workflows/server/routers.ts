@@ -5,7 +5,6 @@ import z from "zod";
 import { PAGINATION } from "@/config/constants";
 import { NodeType } from "@/generated/prisma/enums";
 import { Node, Edge } from "@xyflow/react";
-import { inngest } from "@/inngest/client";
 import { sendWorkflowExecutionEvent } from "@/inngest/utils";
 
 
