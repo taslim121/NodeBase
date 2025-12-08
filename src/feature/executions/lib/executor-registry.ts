@@ -4,6 +4,9 @@ import { manualTriggerExecutor } from "@/feature/triggers/components/manual-trig
 import { httpRequestExecutor } from "../components/http-requests/executor";
 import { googleFormTriggerExecutor } from "@/feature/triggers/components/google-form-trigger/executor";
 import { stripeTriggerExecutor } from "@/feature/triggers/components/stripe-trigger/executor";
+import { geminiExecutor } from "../components/gemini/executor";
+import { openAiExecutor } from "../components/openai/executor";
+import { anthropicExecutor } from "../components/anthropic/executor";
 
 export const executorRegistry: Record<NodeType, NodeExecutor> = {
     [NodeType.MANUAL_TRIGGER]: manualTriggerExecutor,
@@ -11,6 +14,9 @@ export const executorRegistry: Record<NodeType, NodeExecutor> = {
     [NodeType.HTTP_REQUEST]: httpRequestExecutor,
     [NodeType.GOOGLE_FORM_TRIGGER]: googleFormTriggerExecutor,
     [NodeType.STRIPE_TRIGGER]: stripeTriggerExecutor,
+    [NodeType.GEMINI]: geminiExecutor,
+    [NodeType.OPENAI]: openAiExecutor,
+    [NodeType.ANTHROPIC]: anthropicExecutor,
 };
 
 export const getExecutor = (type: NodeType): NodeExecutor => {
