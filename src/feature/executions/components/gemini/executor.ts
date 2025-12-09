@@ -6,6 +6,7 @@ import { geminiChannel } from "@/inngest/channels/gemini";
 import { AVAILABLE_MODELS } from "./dialog";
 import { generateText } from "ai";
 import prisma from "@/lib/db";
+import { decrypt } from "@/lib/encryption";
 
 Handlebars.registerHelper("json", (context) =>
     new Handlebars.SafeString(JSON.stringify(context, null, 2)));
@@ -92,7 +93,7 @@ export const geminiExecutor: NodeExecutor<GeminiData> = async ({
         throw new NonRetriableError("Gemini node: Credential not found.");
     }
     const google = createGoogleGenerativeAI({
-        apiKey: credential.value,
+        apiKey: decrypt(credential.value),
     });
 
     try {

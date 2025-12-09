@@ -6,6 +6,7 @@ import { anthropicChannel } from "@/inngest/channels/anthropic";
 import { AVAILABLE_MODELS } from "./dialog";
 import { generateText } from "ai";
 import prisma from "@/lib/db";
+import { decrypt } from "@/lib/encryption";
 
 Handlebars.registerHelper("json", (context) =>
     new Handlebars.SafeString(JSON.stringify(context, null, 2)));
@@ -92,7 +93,7 @@ export const anthropicExecutor: NodeExecutor<AnthropicData> = async ({
         throw new NonRetriableError("Anthropic node: Credential not found.");
     }
     const anthropic = createAnthropic({
-        apiKey: credential.value,
+        apiKey: decrypt(credential.value),
     });
 
     try {

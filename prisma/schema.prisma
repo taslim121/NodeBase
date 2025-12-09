@@ -185,4 +185,6 @@ model Execution {
   inngestEventId String @unique
 
   output Json?
+
+  @@index([workflowId, startedAt(sort: Desc)])
 }
