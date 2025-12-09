@@ -1,21 +1,14 @@
-import {withSentryConfig} from "@sentry/nextjs";
+import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
   devIndicators: false,
   serverExternalPackages: ['@sentry/node'],
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      // Exclude Node.js built-in modules from client bundle
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        'async_hooks': false,
-        'fs': false,
-        'path': false,
-        'crypto': false,
-      };
-    }
+  webpack: (config) => {
+    config.resolve.fallback = {
+      'async_hooks': false,
+    };
     return config;
   },
   async redirects() {
