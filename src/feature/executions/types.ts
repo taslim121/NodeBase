@@ -9,6 +9,7 @@ export interface NodeExecutorParams<TDtata = Record<string, unknown>> {
     data: TDtata;
     nodeId: string;
     context: WorkFlowContext;
+    userId: string;
     step: StepTools;
     publish: Realtime.PublishFn;
 }
