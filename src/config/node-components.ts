@@ -1,8 +1,10 @@
 import { InitialNode } from "@/components/initial-node";
 import { AnthropicNode } from "@/feature/executions/components/anthropic/node";
+import { DiscordNode } from "@/feature/executions/components/discord/node";
 import { GeminiNode } from "@/feature/executions/components/gemini/node";
 import { HttpRequestNode } from "@/feature/executions/components/http-requests/node";
 import { OpenAiNode } from "@/feature/executions/components/openai/node";
+import { SlackNode } from "@/feature/executions/components/slack/node";
 import { GoogleFormTriggerNode } from "@/feature/triggers/components/google-form-trigger/node";
 import { ManualTriggerNode } from "@/feature/triggers/components/manual-trigger/node";
 import { StripeTriggerNode } from "@/feature/triggers/components/stripe-trigger/node";
@@ -20,6 +22,8 @@ export const nodeComponents = {
     [NodeType.GEMINI]: GeminiNode,
     [NodeType.OPENAI]: OpenAiNode,
     [NodeType.ANTHROPIC]: AnthropicNode,
+    [NodeType.DISCORD]: DiscordNode,
+    [NodeType.SLACK]: SlackNode,
 
 } as const satisfies NodeTypes;
 

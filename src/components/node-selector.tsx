@@ -70,6 +70,18 @@ const executionNodes: NodeTypeOption[] = [
     description: "Interact with Claude models.",
     icon: "/anthropic.svg",
   },
+  {
+    type: NodeType.DISCORD,
+    label: "Discord",
+    description: "Send messages to Discord channels.",
+    icon: "/discord.svg",
+  },
+  {
+    type: NodeType.SLACK,
+    label: "Slack",
+    description: "Send messages to Slack channels.",
+    icon: "/slack.svg",
+  },
 ];
 
 interface NodeSelectorProps {
