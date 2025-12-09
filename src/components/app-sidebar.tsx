@@ -80,6 +80,7 @@ const AppSidebar = () => {
                           : pathname.startsWith(item.url)
                       }
                       className="h-10 px-4"
+                      asChild
                     >
                       <Link
                         href={item.url}
