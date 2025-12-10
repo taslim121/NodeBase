@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "prebuild": "prisma generate",
     "build": "next build --turbopack",
+    "vercel-build": "prisma generate && next build --turbopack",
     "start": "next start",
     "lint": "biome check",
     "ngrok:dev": "ngrok http --url=sid-unhieratical-mildred.ngrok-free.dev 3000",

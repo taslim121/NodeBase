@@ -5,9 +5,9 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider      = "prisma-client"
-  output        = "../src/generated/prisma"
-  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+  provider      = "prisma-client-js"
+  output        = "../src/generated/prisma" // ensure this is inside your project so Next will include it
+  binaryTargets = ["native", "rhel-openssl-3.0.x"] // include the deployment platform
 }
 
 datasource db {
