@@ -10,7 +10,8 @@
     "ngrok:dev": "ngrok http --url=sid-unhieratical-mildred.ngrok-free.dev 3000",
     "format": "biome format --write",
     "inngest:dev": "inngest-cli dev",
-    "dev:all": "mprocs"
+    "dev:all": "mprocs",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^2.0.41",
