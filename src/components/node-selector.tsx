@@ -5,7 +5,7 @@ import { useReactFlow } from "@xyflow/react";
 import { GlobeIcon, MousePointer2Icon } from "lucide-react";
 import { useCallback } from "react";
 import { toast } from "sonner";
-import { NodeType } from "@/generated/prisma/enums";
+import { NodeType } from "@/generated/prisma/client";
 import { Separator } from "./ui/separator";
 import {
   Sheet,

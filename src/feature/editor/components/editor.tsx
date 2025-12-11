@@ -27,7 +27,7 @@ import { AddNodeButton } from "./add-node-button";
 
 import { useSetAtom } from "jotai";
 import { editorAtom } from "../store/atom";
-import { NodeType } from "@/generated/prisma/enums";
+import { NodeType } from "@/generated/prisma/client";
 import { ExecuteWorkflowButton } from "./execute-workflow-button";
 
 export const EditorLoading = () => {

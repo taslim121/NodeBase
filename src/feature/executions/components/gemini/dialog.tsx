@@ -34,7 +34,7 @@ import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useCredentialsByType } from "@/feature/credentials/hooks/use-credentials";
-import { CredentialType } from "@/generated/prisma/enums";
+import { CredentialType } from "@/generated/prisma/client";
 import Image from "next/image";
 
 export const AVAILABLE_MODELS = [

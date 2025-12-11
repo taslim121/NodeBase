@@ -21,7 +21,7 @@ import { useCredentialsParams } from "../hooks/use-credentials-params";
 import { useEntitySearch } from "@/hooks/use-entity-search";
 import type { Credential } from "@/generated/prisma/client";
 
-import { CredentialType } from "@/generated/prisma/enums";
+import { CredentialType } from "@/generated/prisma/client";
 import Image from "next/image";
 
 export const CredentialsSearch = () => {

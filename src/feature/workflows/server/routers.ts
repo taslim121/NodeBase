@@ -3,7 +3,7 @@ import prisma from "@/lib/db";
 import { generateSlug } from "random-word-slugs";
 import z from "zod";
 import { PAGINATION } from "@/config/constants";
-import { NodeType } from "@/generated/prisma/enums";
+import { NodeType } from "@/generated/prisma/client";
 import { Node, Edge } from "@xyflow/react";
 import { sendWorkflowExecutionEvent } from "@/inngest/utils";
 
