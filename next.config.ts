@@ -10,15 +10,6 @@ const nextConfig: NextConfig = {
       'async_hooks': false,
     };
     return config;
-  },
-  async redirects() {
-    return [
-      {
-        source: "/",
-        destination: "/workflows",
-        permanent: false,
-      }
-    ];
   }
 };
 

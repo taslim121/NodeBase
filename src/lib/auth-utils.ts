@@ -7,18 +7,28 @@ export const requireAuth = async () => {
         headers: await headers()
     });
 
-    if(!session){
+    if (!session) {
         redirect("/login");
     }
 
     return session;
 };
+
 export const requireUnAuth = async () => {
     const session = await auth.api.getSession({
         headers: await headers()
     });
 
-    if(session){
+    if (session) {
         redirect("/");
+    }
+};
+export const getOptionalSession = async () => {
+    try {
+        return await auth.api.getSession({
+            headers: await headers()
+        });
+    } catch {
+        return null;
     }
 };
